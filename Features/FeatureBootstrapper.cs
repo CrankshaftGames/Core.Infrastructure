@@ -1,19 +1,20 @@
 using System.Collections.Generic;
+using Assets.Core.Infrastructure.Features;
 
 namespace Core.Infrastructure.Features
 {
 	public abstract class FeatureBootstrapper
 	{
-		private readonly IEnumerable<IFeature> _features;
+        protected readonly IFeaturesProvider _featureCollectionProvider;
 
-		protected FeatureBootstrapper(IEnumerable<IFeature> features)
+        protected FeatureBootstrapper(IFeaturesProvider featureCollectionProvider)
 		{
-			_features = features;
-		}
+            _featureCollectionProvider = featureCollectionProvider;
+        }
 
 		public void RunFeatures()
 		{
-			foreach (var feature in _features)
+			foreach (var feature in _featureCollectionProvider.GetFeatures())
 			{
 				if (feature.IsAvailable)
 				{

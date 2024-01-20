@@ -4,7 +4,7 @@ namespace Core.Infrastructure
 {
 	public abstract class EntryPoint<T> where T : RootController
 	{
-		private RootController RootController { get; set; }
+		private T RootController { get; set; }
 
 		protected EntryPoint(T rootController)
 		{
