@@ -10,10 +10,5 @@ namespace Core.Infrastructure
 		{
 			RootController = rootController;
 		}
-
-		protected void Initialize()
-		{
-			RootController.StartTree();
-		}
 	}
 }

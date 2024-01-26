@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Infrastructure.Controllers
 {
-	public abstract class Controller
+	public abstract class Controller : IDisposable
 	{
 		private readonly IControllerFactory _factory;
 		private readonly List<Controller> _children = new();
@@ -14,11 +14,7 @@ namespace Core.Infrastructure.Controllers
 			_factory = factory;
 		}
 
-		protected virtual void Start()
-		{
-		}
-
-		protected void Terminate()
+		public void Dispose()
 		{
 			foreach (var disposable in _disposablesList)
 			{
@@ -29,7 +25,7 @@ namespace Core.Infrastructure.Controllers
 
 			foreach (var child in _children)
 			{
-				child.Terminate();
+				child.Dispose();
 			}
 
 			_children.Clear();
@@ -48,13 +44,12 @@ namespace Core.Infrastructure.Controllers
 		{
 			var controller = _factory.Create<T>();
 			_children.Add(controller);
-			controller.Start();
 			return controller;
 		}
 
 		protected void RemoveChildController<T>(T controller) where T : Controller
 		{
-			controller.Terminate();
+			controller.Dispose();
 			_children.Remove(controller);
 		}
 

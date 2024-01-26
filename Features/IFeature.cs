@@ -1,9 +1,10 @@
+using System;
+
 namespace Core.Infrastructure.Features
 {
-	public interface IFeature
+	public interface IFeature : IDisposable
 	{
 		bool IsAvailable { get; }
 		void Run();
-		void Terminate();
 	}
 }
