@@ -1,6 +1,6 @@
 namespace Core.Infrastructure.Events
 {
-	public class EventData
-	{
-	}
+    public class EventData
+    {
+    }
 }
