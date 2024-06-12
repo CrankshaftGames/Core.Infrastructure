@@ -4,7 +4,7 @@
   "displayName": "Core.Infrastructure",
   "description": "Framework that provides architectural infrastructure.",
   "unity": "2020.3",
-  "version": "2024.0.0",
+  "version": "0.0.1",
   "keywords": [
     "crankshaftgames",
     "core"
