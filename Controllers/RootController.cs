@@ -1,19 +1,10 @@
 namespace Core.Infrastructure.Controllers
 {
-	public class RootController : Controller
+	public abstract class RootController : Controller
 	{
-		public RootController(IControllerFactory factory) : base(factory)
+		public void RunTree()
 		{
-		}
-
-		public void StartTree()
-		{
-			Start();
-		}
-
-		public void TerminateTree()
-		{
-			Terminate();
+			Run();
 		}
 	}
 }

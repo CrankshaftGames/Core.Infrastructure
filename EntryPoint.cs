@@ -1,19 +1,19 @@
-using Core.Infrastructure.Controllers;
+using Core.Infrastructure.Features;
 
 namespace Core.Infrastructure
 {
-	public abstract class EntryPoint<T> where T : RootController
+	public abstract class EntryPoint
 	{
-		private RootController RootController { get; set; }
+		private readonly FeatureBootstrapper _featureBootstrapper;
 
-		protected EntryPoint(T rootController)
+		protected EntryPoint(FeatureBootstrapper featureBootstrapper)
 		{
-			RootController = rootController;
+			_featureBootstrapper = featureBootstrapper;
 		}
 
 		protected void Initialize()
 		{
-			RootController.StartTree();
+			_featureBootstrapper.RunFeatures();
 		}
 	}
 }

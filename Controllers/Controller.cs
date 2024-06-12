@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Core.Infrastructure.Controllers
 {
 	public abstract class Controller
 	{
-		private readonly IControllerFactory _factory;
 		private readonly List<Controller> _children = new();
 		private readonly List<IDisposable> _disposablesList = new();
+		private Task _controllerTask;
 
-		protected Controller(IControllerFactory factory)
+		protected Task Run()
 		{
-			_factory = factory;
+			_controllerTask = Running();
+			return _controllerTask;
 		}
 
-		protected virtual void Start()
-		{
-		}
-
+		protected abstract Task Running();
+		
 		protected void Terminate()
 		{
 			foreach (var disposable in _disposablesList)
@@ -33,6 +34,7 @@ namespace Core.Infrastructure.Controllers
 			}
 
 			_children.Clear();
+			_controllerTask.Dispose();
 			OnTerminate();
 		}
 
@@ -44,12 +46,12 @@ namespace Core.Infrastructure.Controllers
 			}
 		}
 
-		protected T AddChildController<T>() where T : Controller
+		protected void AddChildController<TController>(TController controller)
+			where TController : Controller
 		{
-			var controller = _factory.Create<T>();
 			_children.Add(controller);
-			controller.Start();
-			return controller;
+			controller.Run();
+			Debug.LogWarning($"Added {controller.GetType().Name}");
 		}
 
 		protected void RemoveChildController<T>(T controller) where T : Controller

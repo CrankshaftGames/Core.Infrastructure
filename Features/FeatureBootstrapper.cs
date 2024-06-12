@@ -6,16 +6,17 @@ namespace Core.Infrastructure.Features
 	{
 		private readonly IEnumerable<IFeature> _features;
 
-		protected FeatureBootstrapper(IEnumerable<IFeature> features)
+		protected FeatureBootstrapper(IFeaturesProvider featuresProvider)
 		{
-			_features = features;
+			_features = featuresProvider.GetFeatures();
 		}
 
-		public void RunFeatures()
+		public async void RunFeatures()
 		{
 			foreach (var feature in _features)
 			{
-				if (feature.IsAvailable)
+				var isAvailable = await feature.Initialize();
+				if (isAvailable)
 				{
 					feature.Run();
 				}

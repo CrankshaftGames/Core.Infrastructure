@@ -1,0 +1,17 @@
+{
+  "name": "com.crankshaftgames.core.infrastructure",
+  "author": "Crankshaft Games",
+  "displayName": "Core.Infrastructure",
+  "description": "Framework that provides architectural infrastructure.",
+  "unity": "2020.3",
+  "version": "2024.0.0",
+  "keywords": [
+    "crankshaftgames",
+    "core"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CrankshaftGames/Core.Infrastructure"
+  }
+}
