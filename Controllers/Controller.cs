@@ -1,51 +1,67 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Core.Infrastructure.Controllers
 {
-    public abstract class Controller : IDisposable
-    {
-        private readonly List<Controller> _children = new();
-        private readonly List<IDisposable> _disposablesList = new();
-        private readonly IControllerFactory _factory;
+	public abstract class Controller
+	{
+		private readonly List<Controller> _children = new();
+		private readonly List<IDisposable> _disposablesList = new();
+		private Task _controllerTask;
 
-        protected Controller(IControllerFactory factory)
-        {
-            _factory = factory;
-        }
+		protected Task Run()
+		{
+			_controllerTask = Running();
+			return _controllerTask;
+		}
 
-        public void Dispose()
-        {
-            foreach (var disposable in _disposablesList) disposable.Dispose();
+		protected abstract Task Running();
+		
+		protected void Terminate()
+		{
+			foreach (var disposable in _disposablesList)
+			{
+				disposable.Dispose();
+			}
 
-            _disposablesList.Clear();
+			_disposablesList.Clear();
 
-            foreach (var child in _children) child.Dispose();
+			foreach (var child in _children)
+			{
+				child.Terminate();
+			}
 
-            _children.Clear();
-            OnTerminate();
-        }
+			_children.Clear();
+			_controllerTask.Dispose();
+			OnTerminate();
+		}
 
-        protected void AddDisposable(IDisposable disposable)
-        {
-            if (!_disposablesList.Contains(disposable)) _disposablesList.Add(disposable);
-        }
+		protected void AddDisposable(IDisposable disposable)
+		{
+			if (!_disposablesList.Contains(disposable))
+			{
+				_disposablesList.Add(disposable);
+			}
+		}
 
-        protected T AddChildController<T>() where T : Controller
-        {
-            var controller = _factory.Create<T>();
-            _children.Add(controller);
-            return controller;
-        }
+		protected void AddChildController<TController>(TController controller)
+			where TController : Controller
+		{
+			_children.Add(controller);
+			controller.Run();
+			Debug.LogWarning($"Added {controller.GetType().Name}");
+		}
 
-        protected void RemoveChildController<T>(T controller) where T : Controller
-        {
-            controller.Dispose();
-            _children.Remove(controller);
-        }
+		protected void RemoveChildController<T>(T controller) where T : Controller
+		{
+			controller.Terminate();
+			_children.Remove(controller);
+		}
 
-        protected virtual void OnTerminate()
-        {
-        }
-    }
+		protected virtual void OnTerminate()
+		{
+		}
+	}
 }

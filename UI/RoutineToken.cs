@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Implementation.UI
+namespace Core.Infrastructure.UI
 {
     public class RoutineToken<TResult> : CustomYieldInstruction
     {
