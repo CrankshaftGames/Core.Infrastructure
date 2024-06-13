@@ -6,5 +6,10 @@ namespace Core.Infrastructure.Controllers
 		{
 			Run();
 		}
+
+		public void TerminateTree()
+		{
+			Terminate();
+		}
 	}
 }

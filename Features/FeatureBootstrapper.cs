@@ -1,24 +1,30 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.Infrastructure.Features
 {
-	public abstract class FeatureBootstrapper
+	internal class FeatureBootstrapper
 	{
 		private readonly IEnumerable<IFeature> _features;
 
-		protected FeatureBootstrapper(IFeaturesProvider featuresProvider)
+		internal FeatureBootstrapper(IFeaturesProvider featuresProvider)
 		{
 			_features = featuresProvider.GetFeatures();
 		}
 
-		public async void RunFeatures()
+		internal async void RunFeatures()
 		{
 			foreach (var feature in _features)
 			{
-				var isAvailable = await feature.Initialize();
-				if (isAvailable)
+				try
 				{
-					feature.Run();
+					await feature.Run();
+				}
+				catch (Exception e)
+				{
+					feature.Terminate();
+					Debug.LogException(e);
 				}
 			}
 		}

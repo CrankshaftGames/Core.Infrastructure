@@ -4,8 +4,7 @@ namespace Core.Infrastructure.Features
 {
 	public interface IFeature
 	{
-		Task<bool> Initialize();
-		void Run();
+		Task Run();
 		void Terminate();
 	}
 }

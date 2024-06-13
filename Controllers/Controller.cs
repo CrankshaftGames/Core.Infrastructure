@@ -34,7 +34,7 @@ namespace Core.Infrastructure.Controllers
 			}
 
 			_children.Clear();
-			_controllerTask.Dispose();
+			_controllerTask?.Dispose();
 			OnTerminate();
 		}
 

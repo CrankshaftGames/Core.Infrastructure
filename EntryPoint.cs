@@ -6,9 +6,9 @@ namespace Core.Infrastructure
 	{
 		private readonly FeatureBootstrapper _featureBootstrapper;
 
-		protected EntryPoint(FeatureBootstrapper featureBootstrapper)
+		protected EntryPoint(IFeaturesProvider featuresProvider)
 		{
-			_featureBootstrapper = featureBootstrapper;
+			_featureBootstrapper = new FeatureBootstrapper(featuresProvider);
 		}
 
 		protected void Initialize()
