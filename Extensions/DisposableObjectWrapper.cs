@@ -3,7 +3,7 @@ using Object = UnityEngine.Object;
 
 namespace Core.Infrastructure.Extensions
 {
-	public class DisposableObjectWrapper : IDisposable
+	public struct DisposableObjectWrapper : IDisposable
 	{
 		private Object _obj;
 
